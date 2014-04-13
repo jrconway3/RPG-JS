@@ -31,6 +31,7 @@ Class.create("Sprite_Character", {
 	scene: null,
 	old_direction: "",
 	direction: "bottom",
+    directions: ["bottom", "left", "right", "up"],
 	initial_dir: null,
 	width: 0,
 	height: 0,
@@ -61,6 +62,12 @@ Class.create("Sprite_Character", {
 			
 			this.graphic_params = this.graphic_params || {};
 
+            if(this.scene.data.system["graphic-params"] != undefined) {
+                var graphic_defaults = this.scene.data.system["graphic-params"];
+                for (var key in graphic_defaults) {
+                    this[key] = graphic_defaults[key] != "" ? graphic_defaults[key] : this[key];
+                }
+            }
 			for (var key in this.graphic_params) {
 				this[key] = this.graphic_params[key] != "" ? this.graphic_params[key] : this[key];
 			}
@@ -129,13 +136,15 @@ Class.create("Sprite_Character", {
 		var array = [], val;
 		for (var i=0 ; i < this.nbSequenceY ; i++) {
 			for (var j=0 ; j < this.nbSequenceX ; j++) {
-				val = "";
-				switch (i) {
-					case 0:  val = "bottom"; break;
-					case 1:  val = "left"; break;
-					case 2:  val = "right"; break;
-					case 3:  val = "up"; break;
-				}
+				val = this.directions[i] || '';
+                if(val == '') {
+    				switch (i) {
+    					case 0:  val = "bottom"; break;
+    					case 1:  val = "left"; break;
+    					case 2:  val = "right"; break;
+    					case 3:  val = "up"; break;
+    				}
+                }
 				val += "_" + j;
 				array.push(val); 
 			}
@@ -160,47 +169,31 @@ Class.create("Sprite_Character", {
 			top: -(this.height - global.game_map.tile_h) - this.regY
 		};
 
+        var anim_directions = {};
+        var anim_frames = [
+            [1, seq_x],
+            [seq_x+1, seq_x*2+1],
+            [seq_x*2+2, seq_x*3+2],
+            [seq_x*3+3, seq_x*4+3]
+        ];
+        var n = 0;
+        for(i in this.directions) {
+            var dir = this.directions[i];
+            anim_directions[dir] = {
+                frames: anim_frames[n],
+                size: {
+                    width: this.width,
+                    height: this.height
+                },
+                position: position,
+                frequence: frequence
+            };
+            n++;
+        }
 
 		this.animation = RPGJS_Canvas.Animation.New({
-		   images: "characters_" + this.graphic,
-		   animations: {
-				 bottom: {
-					frames: [1, seq_x],
-					 size: {
-						width: this.width,
-						height: this.height
-					  },
-					  position: position,
-					 frequence: frequence
-				 },
-				 left: {
-					frames: [seq_x+1, seq_x*2+1],
-					 size: {
-						width: this.width,
-						height: this.height
-					  },
-					  position: position,
-					 frequence: frequence
-				 },
-				 right: {
-					frames: [seq_x*2+2, seq_x*3+2],
-					 size: {
-						width: this.width,
-						height: this.height
-					  },
-					  position: position,
-					 frequence: frequence
-				 },
-				 up: {
-					frames: [seq_x*3+3, seq_x*4+3],
-					 size: {
-						width: this.width,
-						height: this.height
-					  },
-					  position: position,
-					 frequence: frequence
-				 }
-		   }
+            images: "characters_" + this.graphic,
+            animations: anim_directions
 		});
 
 		this.animation.add(this.entity.el, true);
@@ -244,36 +237,30 @@ Class.create("Sprite_Character", {
 				left: 0 - action['graphic-params'].regX,
 				top: -18 - action['graphic-params'].regY
 			};
+            if(action['graphic-params'].directions == undefined) {
+                action['graphic-params'].directions = this.directions;
+            }
+
 			animation = {};
-			animation[id + "_bottom"] =  {
-				frames: [0, seq_x],
-				 size: seq,
-				  position: position,
-				 frequence: frequence,
-				 finish: finish
-			 };
-			 animation[id + "_left"] = {
-				frames: [seq_x+1, seq_x*2+1],
-				 size: seq,
-				  position: position,
-				 frequence: frequence,
-				 finish: finish
-			 };
-			 animation[id + "_right"] = {
-				frames: [seq_x*2+2, seq_x*3+2],
-				 size: seq,
-				  position: position,
-				 frequence: frequence,
-				 finish: finish
-			 };
-			  animation[id + "_up"] = {
-				frames: [seq_x*3+3, seq_x*4+3],
-				 size: seq,
-				  position: position,
-				 frequence: frequence,
-				 finish: finish
-			 };
-			
+            var anim_frames = [
+                [0, seq_x],
+                [seq_x+1, seq_x*2+1],
+                [seq_x*2+2, seq_x*3+2],
+                [seq_x*3+3, seq_x*4+3]
+            ];
+            var n = 0;
+            for(i in action['graphic-params'].directions) {
+                var dir = action['graphic-params'].directions[i];
+                anim_directions[id + "_" + dir] = {
+                    frames: anim_frames[n],
+                    size: seq,
+                    position: position,
+                    frequence: frequence,
+                    finish: finish
+                };
+                n++;
+            }
+
 			this.action_animation = RPGJS_Canvas.Animation.New({
 			   images: "characters_" + action.graphic,
 			   animations: animation

@@ -65,12 +65,13 @@ Class.create("RPGJS", {
 			common_events: {},
 			animations: {}
 		};
-		
+
 		for (var key in _default) {
 			if (!data[key]) {
 				data[key] = _default[key];
 			}
 		}
+
 		return data;
 	},
 	
