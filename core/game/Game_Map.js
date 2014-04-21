@@ -96,7 +96,6 @@ var _class = {
 			global.game_player.x = params.pos.x;
 			global.game_player.y = params.pos.y;	
 		}
-		
 
 		this.map = global.data.map_infos[this.map_id];
 		if (!this.map) {
@@ -108,7 +107,8 @@ var _class = {
 		if (scene) {
 			this._scene  = scene;
 		}
-		
+
+
 		function loadMap(data) {
 			self.map.data = data;
 			self.grid = Class.New('Grid', [data.map.length, data.map[0].length]);
@@ -118,15 +118,17 @@ var _class = {
 			self._setup();
 		}
 
-        RPGJS.Plugin.call("Game", "beforeLoadMap", [this]);
-		
-		var map_data = RPGJS.maps[this.map_id];
-		if (map_data) {
-			loadMap({map: map_data});
-		}
-		else {
-			(CE.Core || CE).getJSON("Data/Maps/MAP-" + this.map_id + ".json", loadMap);
-		}
+        RPGJS.Plugin.call("Game", "beforeLoadMap", [this, loadMap, global]);
+
+        if(this.preload == undefined) {
+    		var map_data = RPGJS.maps[this.map_id];
+    		if (map_data) {
+    			loadMap({map: map_data});
+    		}
+    		else {
+    			(CE.Core || CE).getJSON("Data/Maps/MAP-" + this.map_id + ".json", loadMap);
+    		}
+        }
    },
    
    scrollMap: function(path) {

@@ -279,84 +279,83 @@ Class.create("Spriteset_Map", {
 					}	
 				});
 					
-				/*	var img_tileset = Cache.get(propreties.tileset, "tilesets");
+				/*
+                	var img_tileset = Cache.get(propreties.tileset, "tilesets");
 					var spriteSheet = new SpriteSheet(img_tileset, self.tile_w, self.tile_h);
 					var bmpSeq = new BitmapSequence(spriteSheet);
-					
 				*/
 					
-					/* 
-					var k = 0, 
-					canvas, stage
-					map_img = [];
-					 for (i=0 ; i < 2 ; i++) {
-						var canvas = document.createElement("canvas");
-						canvas.width = map.length * self.tile_w;
-						canvas.height = map[0].length * self.tile_h;
-						stage = new Stage(canvas);
-						map_img.push(stage);
-					 }
-					 */
-				} 	
+				/* 
+				    var k = 0, 
+				    canvas, stage
+				    map_img = [];
+				    for (i=0 ; i < 2 ; i++) {
+					   var canvas = document.createElement("canvas");
+					   canvas.width = map.length * self.tile_w;
+					   canvas.height = map[0].length * self.tile_h;
+					   stage = new Stage(canvas);
+					   map_img.push(stage);
+				    }
+                */
+            }
 
-				var map_data = this.data.data.map,
-					autotiles = this.data.autotiles || {},
-					map_prop = this.data.propreties || {},
-					img = RPGJS_Canvas.Materials.get("tileset"),
-					tile_w, tile_h,
-					prop;
-					  this.width = map_data.length;
-					  this.height = map_data[0].length;
-					  CE.benchmark("draw map");
-					  CE.each(map_data, function(i, x) {
-						CE.each(map_data[i], function(j, array) {
-							CE.each(map_data[i][j], function(k, id) {
+			var map_data = this.data.data.map,
+				autotiles = this.data.autotiles || {},
+				map_prop = this.data.propreties || {},
+				img = RPGJS_Canvas.Materials.get("tileset"),
+				tile_w, tile_h,
+				prop;
+
+            this.width = map_data.length;
+            this.height = map_data[0].length;
+            CE.benchmark("draw map");
+            CE.each(map_data, function(i, x) {
+				CE.each(map_data[i], function(j, array) {
+					CE.each(map_data[i][j], function(k, id) {
+
+						if (map_data[i][j][k] === undefined || map_data[i][j][k] == null) {
+							return;
+						}
+
+						var tile = self.scene.createElement();
+
+						if (self.nb_autotiles_max * 48 <= id) {
 							
-								if (map_data[i][j][k] === undefined || map_data[i][j][k] == null) {
-									return;
+							id -= (self.nb_autotiles_max * 48);
+							var pos_y = parseInt(id / (256 / self.tile_h)) * self.tile_h;
+							var pos_x = (id % (256 / self.tile_w)) * self.tile_w;
+							if (self.data.graphics && self.data.graphics.tileset) {
+								tile_w = self.tile_w;
+								if (pos_x + self.tile_w > img.width) {
+									tile_w -= (pos_x + self.tile_w) - img.width;
 								}
-				
-								var tile = self.scene.createElement();
-									
-								if (self.nb_autotiles_max * 48 <= id) {
-									
-									id -= (self.nb_autotiles_max * 48);
-									var pos_y = parseInt(id / (256 / self.tile_h)) * self.tile_h;
-									var pos_x = (id % (256 / self.tile_w)) * self.tile_w;
-									if (self.data.graphics && self.data.graphics.tileset) {
-										tile_w = self.tile_w;
-										if (pos_x + self.tile_w > img.width) {
-											tile_w -= (pos_x + self.tile_w) - img.width;
-										}
-										tile_h = self.tile_h;
-										if (pos_y + self.tile_h > img.height) {
-											tile_h -= (pos_y + self.tile_h) - img.height;
-										}
-										tile.drawImage("tileset", pos_x, pos_y, tile_w, tile_h, 0, 0, tile_w, tile_h);
-									}
-									prop = map_prop[id];
+								tile_h = self.tile_h;
+								if (pos_y + self.tile_h > img.height) {
+									tile_h -= (pos_y + self.tile_h) - img.height;
 								}
-								else if (autotiles_array[id]) {
-									tile.drawImage(autotiles_array[id]);
-									prop = autotiles[Math.floor(id / 48)];
-								}
-								
-								
-								
-								tile.x = i * self.tile_w;
-								tile.y = j * self.tile_h;
-								
-								
-								if (!prop) {
-									prop = [0, 0];
-								}
-								if (prop.length == 0) {
-									prop = [0, 0];
-								}
-								self.layer[((prop[0] > 0 ? 1 : 0) * 4)].append(tile);
-							});
-						});
-					  }); 
+								tile.drawImage("tileset", pos_x, pos_y, tile_w, tile_h, 0, 0, tile_w, tile_h);
+							}
+							prop = map_prop[id];
+						}
+						else if (autotiles_array[id]) {
+							tile.drawImage(autotiles_array[id]);
+							prop = autotiles[Math.floor(id / 48)];
+						}
+
+						tile.x = i * self.tile_w;
+						tile.y = j * self.tile_h;
+
+						if (!prop) {
+							prop = [0, 0];
+						}
+						if (prop.length == 0) {
+							prop = [0, 0];
+						}
+						self.layer[((prop[0] > 0 ? 1 : 0) * 4)].append(tile);
+					});
+				});
+            });
+        }
 
 		var w = this.getWidthPixel(),
 			h = this.getHeightPixel();

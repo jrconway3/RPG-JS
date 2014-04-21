@@ -339,9 +339,16 @@ Existing type (id: root of path)
 */
 	ready: function(callback) {
 		var self = this;
-		
+
+        var RPGJS_extends = [Animation, Input, Spritesheet, Scrolling, Window, Text, Effect];
+        if(self.params.extend != undefined) {
+            if(Array.isArray(self.params.extend) == false) {
+                self.params.extend = [self.params.extend];
+            }
+            RPGJS_extends = RPGJS_extends.concat(self.params.extend);
+        }
 		RPGJS_Canvas = CE.defines(this.params.canvas, this.params).
-			extend([Animation, Input, Spritesheet, Scrolling, Window, Text, Effect]).
+			extend(RPGJS_extends).
 			ready(function() {
 			
 /**
