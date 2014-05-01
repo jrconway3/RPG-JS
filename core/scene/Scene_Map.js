@@ -150,11 +150,10 @@ RPGJS_Canvas.Scene.New({
 			}
 			load_i++;
 		}
-		
-		RPGJS_Canvas.Materials.load("images", images, progress, finish);		
+
+		RPGJS_Canvas.Materials.load("images", images, progress, finish);
 		RPGJS_Canvas.Materials.load("sounds", sounds, progress, finish);
-		
-		
+
 	},
 	nbKeyPress: 0,
 	keysAssign: function() {
@@ -208,21 +207,21 @@ RPGJS_Canvas.Scene.New({
 		
 	},
 	tilesetLoad: function() {
-	
+
 		this.spriteset = Class.New("Spriteset_Map", [this, this.stage, this.data, {
 			autotiles: this.data.autotiles_img,
 			actions: this.data.actions
 		}]);
-		
+
 		if (+this.data.musics.bgm) {
 			global.game_system.bgmPlay(this.data.musics.bgm);
 		}
 		if (+this.data.musics.bgs) {
 			global.game_system.bgsPlay(this.data.musics.bgs);
 		}
-		
+
 		this.keysAssign();
-		
+
 		if (this.data.system.gamepad != "_no" && typeof(Gamepad) !== 'undefined') {
 			this.gamepad = RPGJS_Canvas.Input.Gamepad.init();
 			this.gamepad.addListener("faceButton0", Input.A);
@@ -233,19 +232,15 @@ RPGJS_Canvas.Scene.New({
 			this.gamepad.addListener("dpadDown", Input.Bottom);
 			this.gamepad.addListener("dpadUp", Input.Up);
 		}
-		
-		
-		RPGJS.Plugin.call("Sprite", "loadMap", [this]);
-		
 
+		RPGJS.Plugin.call("Sprite", "loadMap", [this]);
 	},
 	render: function(stage) {
-	
 		if (!this.spriteset) {
 			stage.refresh();
 			return;
 		}
-	
+
 		var input = {
 			"left": [Input.Left, "x"],
 			"right": [Input.Right, "x"],

@@ -48,7 +48,6 @@ Class.create("Sprite_Character", {
 		this.refresh(data);
 		this.setPosition(this.x, this.y);
 		layer.append(this.entity.el);
-		
 	},
 	
 	remove: function() {
@@ -94,7 +93,7 @@ Class.create("Sprite_Character", {
 		if (!this.initial_dir) {
 			this.initial_dir = this.direction;
 		}
-		
+
 		if (+this.graphic) {
 		
 			function load() {
@@ -118,7 +117,7 @@ Class.create("Sprite_Character", {
 			this.stop();
 			this.entity.el.removeCmd("drawImage");
 		}
-		
+
 		if (this.opacity != undefined) {
 			this.entity.el.opacity = this.opacity / 255;
 		}

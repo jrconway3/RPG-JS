@@ -151,8 +151,8 @@ var _class = {
 @param {String} d Direction : up, right, bottom or left
 @return {Object}
 */	
-   passable: function(entity, old_x, old_y, x, y, d) {
-		
+    passable: function(entity, old_x, old_y, x, y, d) {
+
 		entity.savePosition();
 		
 		entity.position(x, y);
@@ -161,8 +161,7 @@ var _class = {
 			prop, k, id, p;
 		var state;
 		var self = this;
-	
-		
+
 		function testLineTile(lines) {
 			var l, face, points;
 			
@@ -445,7 +444,7 @@ var _class = {
 			autotiles = this.autotiles_data[this.map.autotiles_id],
 			events = [],
 			data_events = [];
-			
+
 		if (!tileset) {
 			tileset = {
 				name: "",
@@ -453,7 +452,7 @@ var _class = {
 				graphic: null
 			};
 		}
-			
+
 		this._tileset_name = tileset.name;
 		this._priorities = tileset.propreties;
 		this._autotiles = autotiles ? autotiles.propreties : {};
@@ -495,7 +494,7 @@ var _class = {
 			else self._callback(obj);
 			
 		}
-		
+
 		global.game_player.start();
 		
 		if (this.events) {
@@ -517,14 +516,13 @@ var _class = {
 				refresh: false
 			});
 		}
-		
+
 		if (total_events == 0) {
 			call();
 		}
-		
-		
+
 		RPGJS.Plugin.call("Game", "loadMap", [this]);
-		
+
    },
    
 /**

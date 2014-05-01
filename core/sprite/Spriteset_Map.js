@@ -81,7 +81,6 @@ Class.create("Spriteset_Map", {
 		this.tilemap({});
 	},
 	tilemap: function(propreties) {
-	
 		RPGJS.Plugin.call("Sprite", "drawMapBegin", [this]);
 		
 		var self = this, autotiles_array = [];
@@ -355,12 +354,12 @@ Class.create("Spriteset_Map", {
 					});
 				});
             });
-        }
 
-		var w = this.getWidthPixel(),
-			h = this.getHeightPixel();
-		this.layer[0].pack(w, h);
-		this.layer[4].pack(w, h);
+            var w = this.getWidthPixel(),
+                h = this.getHeightPixel();
+            this.layer[0].pack(w, h);
+            this.layer[4].pack(w, h);
+        }
 		
 		RPGJS.Plugin.call("Sprite", "drawMapEnd", [this]);
 
@@ -374,13 +373,13 @@ Class.create("Spriteset_Map", {
 			e = this.data.events[i];
 			this.addCharacter(e);
 		}
-		
+
 		this.player = Class.New("Sprite_Character", [this.scene, this.data.player, layer, global.game_player]);
 		this.player.initAnimationActions(this.data.actions);
-		
+
 		this.scrolling = RPGJS_Canvas.Scrolling.New(this.scene, this.tile_w, this.tile_h);
 		this.scrolling.setMainElement(this.player.getSprite());
-		
+
 		this.scrolling.addScroll({
 		   element: this.map, 
 		   speed: global.game_player.speed,
@@ -388,12 +387,12 @@ Class.create("Spriteset_Map", {
 		   width: this.getWidthPixel(),
 		   height: this.getHeightPixel()
 		});
-		
+
 		RPGJS.Plugin.call("Sprite", "drawCharactersEnd", [this]);
 	},
 	
 	addCharacter: function(data) {
-		var sprite = Class.New("Sprite_Character", [this.scene, data, this.layer[3], global.game_map.getEvent(data.id)]);
+		var sprite = Class.New("Sprite_Character", [this.scene, data, this.layer[this.char_layer], global.game_map.getEvent(data.id)]);
 		this.events[data.id] = sprite;
 		RPGJS.Plugin.call("Sprite", "addCharacter", [sprite, data, this]);
 	},
@@ -553,7 +552,7 @@ Class.create("Spriteset_Map", {
 	moveEvent: function(id, value, dir, nbDir, params) {
 		var axis = dir == "left" || dir == "right" ? "x" : "y";
 		this.getEvent(id).move(axis, value, dir, nbDir, params);
-		this.layer[3].children().sort(function(a, b) {
+		this.layer[this.char_layer].children().sort(function(a, b) {
 			var za = a._z ? a._z : a.y;
 			var zb = b._z ? b._z : b.y;
 			return za - zb;
