@@ -72,17 +72,20 @@ Class.create("Spriteset_Map", {
 		this.params = params;
 		this.map = this.scene.createElement();
 		this.nb_layer = this.nb_layer * 2 + 1;
-		CE.each(this.nb_layer, function(i) {
-			self.layer[i] = scene.createElement();
-			self.map.append(self.layer[i]);
-		});
-		this.picture_layer = this.scene.createElement();
+
+        RPGJS.Plugin.call("Sprite", "drawMapBegin", [this]);
+        if(!self.override) {
+    		CE.each(this.nb_layer, function(i) {
+    			self.layer[i] = scene.createElement();
+    			self.map.append(self.layer[i]);
+    		});
+        }
+
+        this.picture_layer = this.scene.createElement();
 		this.stage.append(this.map, this.picture_layer);
 		this.tilemap({});
 	},
 	tilemap: function(propreties) {
-		RPGJS.Plugin.call("Sprite", "drawMapBegin", [this]);
-		
 		var self = this, autotiles_array = [];
 
         if(!self.override) {
