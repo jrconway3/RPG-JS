@@ -68,11 +68,11 @@ Class.create("Sprite_Character", {
             if(this.scene.data.system["graphic-params"] != undefined) {
                 var graphic_defaults = this.scene.data.system["graphic-params"];
                 for (var key in graphic_defaults) {
-                    this[key] = graphic_defaults[key] != "" ? graphic_defaults[key] : this[key];
+                    this[key] = graphic_defaults[key] != undefined ? graphic_defaults[key] : this[key];
                 }
             }
 			for (var key in this.graphic_params) {
-				this[key] = this.graphic_params[key] != "" ? this.graphic_params[key] : this[key];
+				this[key] = this.graphic_params[key] != undefined ? this.graphic_params[key] : this[key];
 			}
 			
 			if (!this.is_start) {
