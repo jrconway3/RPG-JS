@@ -29,6 +29,7 @@ THE SOFTWARE.
 RPGJS_Canvas.Scene.New({
 	name: "Scene_Map",
 	data: {},
+    timestamp: false,
 	/*materials: {
 		images: {
 			//"window": "../materials/Graphics/Windowskins/window.png"

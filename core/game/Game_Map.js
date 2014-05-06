@@ -51,6 +51,7 @@ var _class = {
 	_scene: null,
 	_callback: null,
 	_tick: {},
+    _overrides: {},
 	initialize: function() {
 		this.tick();
 	},
@@ -120,7 +121,7 @@ var _class = {
 
         RPGJS.Plugin.call("Game", "beforeLoadMap", [this, loadMap, global]);
 
-        if(this.preload == undefined) {
+        if(this._overrides.map == undefined) {
     		var map_data = RPGJS.maps[this.map_id];
     		if (map_data) {
     			loadMap({map: map_data});

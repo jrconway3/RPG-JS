@@ -33,7 +33,6 @@ Class.create("Spriteset_Map", {
 @type CanvasEngine.Element
 */
 	stage: null,
-    override: false,
 /**
 @doc spriteset_map/
 @property scene Main Scene
@@ -64,6 +63,7 @@ Class.create("Spriteset_Map", {
 */
 	map: null,
 	pictures: {},
+    _overrides: {},
 	initialize: function(scene, stage, data, params) {
 		var self = this;
 		this.scene = scene;
@@ -72,9 +72,10 @@ Class.create("Spriteset_Map", {
 		this.params = params;
 		this.map = this.scene.createElement();
 		this.nb_layer = this.nb_layer * 2 + 1;
+        this._overrides = global.game_map._overrides;
 
         RPGJS.Plugin.call("Sprite", "drawMapBegin", [this]);
-        if(!self.override) {
+        if(!this._overrides.spriteset) {
     		CE.each(this.nb_layer, function(i) {
     			self.layer[i] = scene.createElement();
     			self.map.append(self.layer[i]);
@@ -88,7 +89,7 @@ Class.create("Spriteset_Map", {
 	tilemap: function(propreties) {
 		var self = this, autotiles_array = [];
 
-        if(!self.override) {
+        if(!this._overrides.spriteset) {
 
     		function bitmapAutoTiles(bmp, position, animated) {
     			var i, x, y;
