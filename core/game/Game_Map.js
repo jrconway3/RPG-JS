@@ -52,6 +52,7 @@ var _class = {
 	_callback: null,
 	_tick: {},
     _overrides: {},
+    passability: {},
 	initialize: function() {
 		this.tick();
 	},
@@ -246,7 +247,12 @@ var _class = {
 		var cells = ret.cells,
 			_passable = true,
 			_testLine = true;
-			
+
+        RPGJS.Plugin.call("Game", "passability", [this, entity, old_x, old_y, d]);
+
+        if(this._overrides.passability != undefined) {
+            return this._overrides.passability;
+        }
 
 		for (var i=0 ; i < cells.length ; i++) {
 			prop = this.grid.getPropertyByCell(cells[i].col,cells[i].row);
@@ -285,7 +291,7 @@ var _class = {
 			}
 		}
 		var e, contact_ret;
-		
+
 		for (var id in this.events) {
 			e = this.events[id];
 			
